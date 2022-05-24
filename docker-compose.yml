@@ -1,0 +1,18 @@
+services:
+  polypheny:
+    build: .
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"    
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=polypheny
+      - POSTGRES_PASSWORD=password
