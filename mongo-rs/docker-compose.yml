@@ -1,5 +1,3 @@
-# https://blog.tericcabrel.com/mongodb-replica-set-docker-compose/
-
 version: '3.8'
 
 services:
@@ -9,8 +7,10 @@ services:
     volumes:
       - ~/mongors/data1:/data/db
       - ./rs-init.sh:/scripts/rs-init.sh
+    networks:
+      - mongors-network
     ports:
-      - 27017:27017
+      - 27021:27017
     links:
       - mongo2
       - mongo3
@@ -21,6 +21,8 @@ services:
     image: mongo:4.4
     volumes:
       - ~/mongors/data2:/data/db
+    networks:
+      - mongors-network
     ports:
       - 27022:27017
     restart: always
@@ -30,20 +32,13 @@ services:
     image: mongo:4.4
     volumes:
       - ~/mongors/data3:/data/db
+    networks:
+      - mongors-network
     ports:
       - 27023:27017
     restart: always
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
-  #postgres:
-  #  image: postgres
-  #  ports:
-  #    - "5432:5432"
-  #  environment:
-  #    - POSTGRES_USER=polypheny
-  #    - POSTGRES_PASSWORD=password
-  #polypheny:
-  #  build: .
-  #  ports:
-  #    - "8080:8080"
-  #    - "8081:8081"
-  #    - "8082:8082"
+
+networks:
+  mongors-network:
+    driver: bridge
